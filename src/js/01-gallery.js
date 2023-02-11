@@ -5,38 +5,37 @@ console.log(galleryItems);
 
 const galeriaFotos = document.querySelector('.gallery');
 
-const galeria = galleryItems
-    .map(({preview, description, original}) =>
-    `<div class="galeriaItem">
-        <a class="galeriaLink" href="${original}">
+const fotos = galleryItems
+    .map(({ preview, description, original }) => 
+    `<div class="gallery__item">
+        <a class="gallery__link" href="${original}">
             <img class="gallery__image" src="${preview}" data-source="${original}" alt="${description}"/>
-    </a>
-</div>`)
+        </a>
+    </div>`)
+    .join('');
 
-.join('');
+galeriaFotos.insertAdjacentHTML('beforeend', fotos)
 
-galeriaFotos.insertAdjacentHTML('beforeend', galeria)
 galeriaFotos.addEventListener('click', imgClick)
 
-function imgClick(event) {
-    event.preventDefault();
+function imgClick(e) {
+    e.preventDefault();
 
-    if (event.target.nodeName !== 'IMG') {
+    if (e.target.nodeName !== 'IMG') {
         return;
     }
 
     const modal = basicLightbox.create(
-        `<img src="${event.target.dataset.source}" width="800" height="600">`,
-
-        {onShow: () => window.addEventListener('keydown', salida),
-         onClose: () => window.removeEventListener('keydown', salida),
+        `<img src="${e.target.dataset.source}" width="800" height="600">`,
+        {Show: () => window.addEventListener('keydown', salida),
+        Close: () => window.removeEventListener('keydown', salida),
         }
     );
     
     modal.show();
 
-    function salida(event) {   
-        if (event.code === "Escape") {
+    function salida(e) {   
+        if (e.code === "Escape") {
             modal.close();
         }
     }
